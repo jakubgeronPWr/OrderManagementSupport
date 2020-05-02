@@ -1,0 +1,18 @@
+[
+  {
+    "Id": 0,
+    "FirstName": "Janusz",
+    "LastName": "Dusigrosz",
+    "ZipCode": "50-108",
+    "City": "Wroc³aw",
+    "Address": "O³awska 48"
+  },
+  {
+    "Id": 0,
+    "FirstName": "Sebix",
+    "LastName": "Szybkar¹czka",
+    "ZipCode": "32-081",
+    "City": "Rzeszów",
+    "Address": "Mickiewicza 52"
+  }
+]

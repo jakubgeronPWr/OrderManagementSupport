@@ -1,0 +1,11 @@
+{
+  "ConnectionStrings": {
+    "OrderManagementConnectionString": "server=(localdb)\\MSSQLLocalDB; Database=OrderManagementDb; Integrated Security=true; MultipleActiveResultSets=true;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft":  "Information" 
+    }
+  } 
+}
