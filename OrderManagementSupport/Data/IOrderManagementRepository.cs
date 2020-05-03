@@ -12,6 +12,7 @@ namespace OrderManagementSupport.Data
         IEnumerable<Client> GetAllClients();
         IEnumerable<Order> GetAllOrders();
         Order GetOrderById(int id);
+        Order DeleteOrderById(int id);
         IEnumerable<Order> GetAllOrdersSortedByCreationDate();
         bool SaveAll();
 

@@ -62,6 +62,24 @@ namespace OrderManagementSupport.Controllers
 
         }
 
+        [HttpDelete("{id:int}")]
+        public ActionResult<Order> DeleteOrder(int id)
+        {
+            try
+            {
+                var order = _repository.DeleteOrderById(id);
+
+                if (order != null && _repository.SaveAll()) return Accepted(_mapper.Map<Order, OrderEntityModel>(order));
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to get orders: {e}");
+                return BadRequest(("Failed to get orders"));
+            }
+
+        }
+
         [HttpPost]
         public IActionResult PostOrder([FromBody]OrderEntityModel model)
         {

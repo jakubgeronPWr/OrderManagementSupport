@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using OrderManagementSupport.Data.Entities;
 
@@ -65,6 +66,21 @@ namespace OrderManagementSupport.Data
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to get order by id: {ex}");
+                return null;
+            }
+        }
+
+        public Order DeleteOrderById(int id)
+        {
+            try
+            {
+                var order = _ctx.Orders.Where(o => o.Id == id).FirstOrDefault();
+                _ctx.Remove(order);
+                return order;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to delete order by id: {ex}");
                 return null;
             }
         }
