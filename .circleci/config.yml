@@ -2,7 +2,7 @@
 
  jobs:
    build:
-     docer:
+     docker:
        - image: 'microsoft/aspnetcore-build:latest'
      steps:
        - checkout
