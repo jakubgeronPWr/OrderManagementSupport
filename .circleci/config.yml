@@ -1,15 +1,11 @@
  version: 2.1
 
- orbs:
-  win: circleci/windows@2.2.0
-
  jobs:
    build:
-     executor: win/default     
+     docer:
+       - image : 'mcr.microsoft.com/dotnet/core/sdk:3.1'
+       - image : 'circleci/node: latest'
     
      steps:
        - checkout
-       - run:
-          name: install npm
-          command: 'npm install -g npm@latest'
        - run: dotnet build
