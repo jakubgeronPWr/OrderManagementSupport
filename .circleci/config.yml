@@ -3,7 +3,7 @@
  jobs:
    build:
      docker:
-       - image: 'microsoft/aspnetcore-build:latest'
+       - image: 'mcr.microsoft.com/dotnet/core/sdk:3.1'
        - image: 'circleci/node:latest'
      steps:
        - checkout
