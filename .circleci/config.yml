@@ -3,7 +3,7 @@
  jobs:
    build:
      docer:
-       - image: microsoft/aspnetcore-build:3.1
+       - image: 'microsoft/aspnetcore-build:latest'
      steps:
        - checkout
        - run:
