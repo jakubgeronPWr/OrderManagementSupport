@@ -31,11 +31,11 @@
     <PackageReference Include="OdeToCode.UseNodeModules" Version="3.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <Content Remove="ClientApp\**" />
     <Compile Remove="ClientApp\**" />
     <EmbeddedResource Remove="ClientApp\**" />
     <None Remove="ClientApp\**" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>
