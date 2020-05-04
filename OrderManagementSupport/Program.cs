@@ -19,7 +19,6 @@ namespace OrderManagementSupport
             var host = CreateHostBuilder(args).Build();
 
             RunSeeding(host);
-
             host.Run();
         }
 
@@ -45,7 +44,6 @@ namespace OrderManagementSupport
         {
             //Remove the default configuration
             builder.Sources.Clear();
-
             builder.AddJsonFile("config.json", false, true)
                 .AddEnvironmentVariables();
         }
