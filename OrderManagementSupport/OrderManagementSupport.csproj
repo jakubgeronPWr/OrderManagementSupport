@@ -33,6 +33,11 @@
     <PackageReference Include="OdeToCode.UseNodeModules" Version="3.0.0" />
   </ItemGroup>
 
+  <Target Name="BuildAngular" BeforeTargets="Build">
+    <Message Text="* * * * * * ANGULAR BUILD * * * * * *" Importance="High"/>
+    <Exec WorkingDirectory="ClientApp" Command="ng build"/>
+  </Target>
+
   <!--<ItemGroup>
     <Content Remove="ClientApp\**" />
     <Compile Remove="ClientApp\**" />
