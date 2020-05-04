@@ -9,7 +9,7 @@
        - checkout
        - run:
           name: update-npm
-          command: 'npm install -g npm@latest'
+          command: 'sudo npm install -g npm@latest'
        - run: find .
        - run:
           name: Restore packages
