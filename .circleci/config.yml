@@ -6,8 +6,8 @@
        - image: 'mcr.microsoft.com/dotnet/core/sdk:3.1'
      steps:
        - checkout
-       - run: RUN apt-get update
-       - run: RUN apt-get install nodejs
+       - run: apt-get update
+       - run: apt-get install nodejs
        - run: npm install -g npm@latest
        - run: find .
        - run:
