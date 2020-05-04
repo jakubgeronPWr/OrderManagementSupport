@@ -3,11 +3,13 @@
  jobs:
    build:
      docer:
-       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
-       - image: circleci/node:10.16.3
-    
+       - image: mcr.microsoft.com/dotnet/core/sdk:3.1    
      steps:
        - checkout
+       -run:
+          name: Restore packages
+          command:
+            dotnet restore
        - run:
           name: update-npm
           command: 'sudo npm install -g npm@latest'
