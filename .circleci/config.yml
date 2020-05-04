@@ -8,9 +8,6 @@
        - checkout
        - run: apt-get update
        - run: apt-get -y install nodejs
-       - run: node -v
-       - run: npm -v
-       - run: npm install -g npm@latest
        - run: find .
        - run:
           name: Restore packages
