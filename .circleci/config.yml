@@ -4,6 +4,7 @@
    build:
      docker:
        - image: 'microsoft/aspnetcore-build:latest'
+       - image: 'circleci/node:latest'
      steps:
        - checkout
        - run:
