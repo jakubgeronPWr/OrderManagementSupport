@@ -6,8 +6,9 @@
        - image: 'mcr.microsoft.com/dotnet/core/sdk:3.1'
      steps:
        - checkout
+       - run: apt-get sudo -y
        - run: apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
-       - run: curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -yq nodejs build-essential
+       - run: curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -yq nodejs
        - run: npm install -g npm
        - run: npm install
        - run: node -v  
