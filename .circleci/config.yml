@@ -6,9 +6,12 @@
        - image: 'mcr.microsoft.com/dotnet/core/sdk:3.1'
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get -y install nodejs
-       - run: node -v
+       - run: apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
+       - run: curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -yq nodejs build-essential
+       - run: npm install -g npm
+       - run: npm install
+       - run: node -v  
+       - run: npm -v  
        - run: find .
        - run:
           name: Restore packages
