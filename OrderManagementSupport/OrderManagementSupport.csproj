@@ -35,6 +35,7 @@
 
   <Target Name="BuildAngular" BeforeTargets="Build">
     <Message Text="* * * * * * ANGULAR BUILD * * * * * *" Importance="High"/>
+    <Exec WorkingDirectory="ClientApp" Command="ng update"/>
     <Exec WorkingDirectory="ClientApp" Command="npm run-script build"/>
     <Message Text="* * * * * * BUILD DONE * * * * * *" Importance="High"/>
   </Target>
