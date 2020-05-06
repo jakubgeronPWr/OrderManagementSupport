@@ -10,10 +10,13 @@
        - run: curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -yq nodejs
        - run: npm install -g npm
        - run: npm install
+       - run: npm update
        - run: node -v  
        - run: npm -v  
+       - run: npm install @angular/compiler --save 
        - run: npm install -g @angular/cli
        - run: npm install --save-dev @angular-devkit/build-angular
+       - run: ng update
        - run: find .
        - run:
           name: Restore packages
