@@ -11,7 +11,7 @@ GET ".../api/orders" | to get all orders
 GET ".../api/orders/{id}" | to get order by id
 POST ".../api/orders" | to add order, in body order with clientId 
 DELETE ".../api/orders/{id}" | to delete order by id
-**CLIENT** | **-**
+**CLIENTS** | **-**
 GET ".../api/clients" | to get all clients
 GET ".../api/clients/{id}" | to get client by id
 POST ".../api/clients" | to add client
