@@ -13,6 +13,7 @@
        - run: npm update
        - run: node -v  
        - run: npm -v  
+       - run: npm install @angular-devkit/schematics
        - run: npm install @angular/compiler --save 
        - run: npm install -g @angular/cli
        - run: npm install --save-dev @angular-devkit/build-angular
