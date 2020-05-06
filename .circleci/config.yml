@@ -12,6 +12,7 @@
        - run: npm install
        - run: node -v  
        - run: npm -v  
+       - run: npm install -g @angular/cli
        - run: find .
        - run:
           name: Restore packages
