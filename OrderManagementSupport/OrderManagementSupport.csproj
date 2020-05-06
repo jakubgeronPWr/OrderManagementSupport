@@ -29,16 +29,20 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.8.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="OdeToCode.UseNodeModules" Version="3.0.0" />
   </ItemGroup>
 
   <Target Name="BuildAngular" BeforeTargets="Build">
-    <Message Text="* * * * * * ANGULAR BUILD * * * * * *" Importance="High"/>
-    <Exec WorkingDirectory="ClientApp" Command="ng update"/>
-    <Exec WorkingDirectory="ClientApp" Command="npm install @angular/compiler --save "/>
-    <Exec WorkingDirectory="ClientApp" Command="npm run-script build"/>
-    <Message Text="* * * * * * BUILD DONE * * * * * *" Importance="High"/>
+    <Message Text="* * * * * * ANGULAR BUILD * * * * * *" Importance="High" />
+    <Exec WorkingDirectory="ClientApp" Command="ng update" />
+    <Exec WorkingDirectory="ClientApp" Command="npm install @angular/compiler --save " />
+    <Exec WorkingDirectory="ClientApp" Command="npm run-script build" />
+    <Message Text="* * * * * * BUILD DONE * * * * * *" Importance="High" />
   </Target>
 
   <!--<ItemGroup>
