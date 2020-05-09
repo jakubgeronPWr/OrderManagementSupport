@@ -8,7 +8,8 @@
        - checkout
        - run: apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
        - run: curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -yq nodejs
-       - run: npm install -g npm && npm install -g && npm update -g
+       - run: npm install -g npm
+       - run: npm install -g && npm update -g
        - run: node -v && npm -v
        - run: npm install -g @angular-devkit/schematics && npm install -g @angular/compiler --save
        - run: npm install -g @angular/cli
