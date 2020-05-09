@@ -16,9 +16,8 @@
        - run: npm install -g npm
        - run: npm install && npm update
        - run: node -v && npm -v
-       - run: ls && cd OrderManagementSupport && cd ClientApp && ls
-       - run: ls && npm install -g @angular/cli
-       - run: npm install -g @angular-devkit/schematics
-       - run: npm install -g --save-dev @angular-devkit/build-angular
-       - run: ls && npm install @angular/compiler --save
+       - run: cd OrderManagementSupport && cd ClientApp && npm install -g @angular/cli
+       - run: cd OrderManagementSupport && cd ClientApp && npm install -g @angular-devkit/schematics
+       - run: cd OrderManagementSupport && cd ClientApp && npm install -g --save-dev @angular-devkit/build-angular
+       - run: cd OrderManagementSupport && cd ClientApp && ls && npm install @angular/compiler --save
        - run: dotnet build
