@@ -11,11 +11,12 @@
        - run: npm install -g npm
        - run: npm install && npm update
        - run: node -v && npm -v
-       - run: npm install -g @angular-devkit/schematics && npm install -g @angular/compiler --save
+       - run: npm install -g @angular-devkit/schematics
        - run: npm install -g @angular/cli
-       - run: npm install --save-dev @angular-devkit/build-angular
+       - run: npm install -g --save-dev @angular-devkit/build-angular
        - run: find .
-       - run: ls
+       - run: ls && cd OrderManagementSupport && cd ClientApp
+       - run: npm install @angular/compiler --save
        - run:
           name: Restore packages
           command:

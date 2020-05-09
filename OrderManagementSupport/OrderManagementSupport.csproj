@@ -39,8 +39,6 @@
 
   <Target Name="BuildAngular" BeforeTargets="Build">
     <Message Text="* * * * * * ANGULAR BUILD * * * * * *" Importance="High" />
-
-    <Exec WorkingDirectory="ClientApp" Command="npm install @angular/compiler --save " />
     <Exec WorkingDirectory="ClientApp" Command="npm run-script build" />
     <Message Text="* * * * * * BUILD DONE * * * * * *" Importance="High" />
   </Target>
