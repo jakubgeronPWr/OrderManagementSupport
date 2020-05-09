@@ -6,19 +6,19 @@
        - image: 'mcr.microsoft.com/dotnet/core/sdk:3.1'
      steps:
        - checkout
+       - run: find .
+       - run:
+          name: Restore packages
+          command:
+            dotnet restore
        - run: apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
        - run: curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -yq nodejs
        - run: npm install -g npm
        - run: npm install && npm update
        - run: node -v && npm -v
-       - run: npm install -g @angular-devkit/schematics
-       - run: npm install -g @angular/cli
-       - run: npm install -g --save-dev @angular-devkit/build-angular
-       - run: find .
        - run: ls && cd OrderManagementSupport && cd ClientApp
+       - run: npm install -g @angular/cli
+       - run: npm install -g @angular-devkit/schematics
+       - run: npm install -g --save-dev @angular-devkit/build-angular
        - run: npm install @angular/compiler --save
-       - run:
-          name: Restore packages
-          command:
-            dotnet restore
        - run: dotnet build
