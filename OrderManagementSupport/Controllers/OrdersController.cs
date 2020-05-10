@@ -26,6 +26,39 @@ namespace OrderManagementSupport.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost]
+        public IActionResult PostOrder([FromBody]OrderEntityModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
+
+                    if (newOrder.OrderDate == DateTime.MinValue)
+                    {
+                        newOrder.OrderDate = DateTime.Now;
+                    }
+                    newOrder.Client = _repository.GetAllClients().Where(c => c.Id == model.ClientId).FirstOrDefault();
+                    _repository.AddOrder(newOrder);
+                    if (_repository.SaveAll())
+                    {
+
+                        return Created($"/api/orders/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
+                    }
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to post order: {e}");
+            }
+            return BadRequest(("Failed to save new order"));
+        }
+
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -62,6 +95,39 @@ namespace OrderManagementSupport.Controllers
 
         }
 
+        [HttpPut("{id:int}")]
+        public IActionResult PutOrder(int id, [FromBody]OrderEntityModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var order = _repository
+                        .GetAllOrders()
+                        .FirstOrDefault(o => o.Id == id);
+                    if (order != null)
+                    {
+                        var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
+                        newOrder.Id = id;
+                        _repository.ModifyOrder(newOrder);
+                        if (_repository.SaveAll())
+                        {
+                            return Accepted($"/api/clients/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
+                        }
+                    }
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to put order: {e}");
+            }
+            return BadRequest(("Failed to edit order"));
+        }
+
         [HttpDelete("{id:int}")]
         public ActionResult<Order> DeleteOrder(int id)
         {
@@ -78,39 +144,6 @@ namespace OrderManagementSupport.Controllers
                 return BadRequest(("Failed to get orders"));
             }
 
-        }
-
-        [HttpPost]
-        public IActionResult PostOrder([FromBody]OrderEntityModel model)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
-
-                    if (newOrder.OrderDate == DateTime.MinValue)
-                    {
-                        newOrder.OrderDate = DateTime.Now;
-                    }
-                    newOrder.Client = _repository.GetAllClients().Where(c => c.Id == model.ClientId).FirstOrDefault();
-                    _repository.AddOrder(newOrder);
-                    if (_repository.SaveAll())
-                    {
-                        
-                        return Created($"/api/orders/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
-                    }
-                }
-                else
-                {
-                    return BadRequest(ModelState);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Failed to post order: {e}");
-            }
-            return BadRequest(("Failed to save new order"));
         }
 
     }

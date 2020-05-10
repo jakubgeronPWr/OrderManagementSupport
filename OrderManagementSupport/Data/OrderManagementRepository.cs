@@ -37,6 +37,21 @@ namespace OrderManagementSupport.Data
             }
         }
 
+        public Client DeleteClientById(int id)
+        {
+            try
+            {
+                var client = _ctx.Clients.Where(c => c.Id == id).FirstOrDefault();
+                _ctx.Remove(client);
+                return client;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to delete client by id: {ex}");
+                return null;
+            }
+        }
+
         public IEnumerable<Order> GetAllOrders()
         {
             try
@@ -70,6 +85,11 @@ namespace OrderManagementSupport.Data
             }
         }
 
+        public void ModifyOrder(Order order)
+        {
+            _ctx.Update(order);
+        }
+
         public Order DeleteOrderById(int id)
         {
             try
@@ -99,8 +119,17 @@ namespace OrderManagementSupport.Data
 
         public void AddOrder(object order)
         {
-            _ctx.Add(order);
+            _ctx.AddAsync(order);
         }
 
+        public void AddClient(object client)
+        {
+            _ctx.AddAsync(client);
+        }
+
+        public void ModifyClient(Client client)
+        {
+            _ctx.Update(client);
+        }
     }
 }

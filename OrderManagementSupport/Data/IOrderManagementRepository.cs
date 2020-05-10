@@ -9,13 +9,20 @@ namespace OrderManagementSupport.Data
 {
     public interface IOrderManagementRepository
     {
-        IEnumerable<Client> GetAllClients();
+        void AddOrder(object order);
         IEnumerable<Order> GetAllOrders();
         Order GetOrderById(int id);
+        void ModifyOrder(Order order);
         Order DeleteOrderById(int id);
         IEnumerable<Order> GetAllOrdersSortedByCreationDate();
+
+        void AddClient(object client);
+        IEnumerable<Client> GetAllClients();
+        void ModifyClient(Client client);
+        Client DeleteClientById(int id);
+
         bool SaveAll();
 
-        void AddOrder(object order);
+        
     }
 }
