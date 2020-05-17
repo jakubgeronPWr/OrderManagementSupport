@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Order } from '../../shared/model/order';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-orders-list',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrdersListComponent implements OnInit {
 
-  constructor() { }
+  orders: Order[];
+
+  constructor(private readonly route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.orders = this.route.snapshot.data.orders;
+    console.log(this.orders);
   }
 
 }

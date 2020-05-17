@@ -7,6 +7,8 @@ import { OrdersListComponent } from './orders/orders-list/orders-list.component'
 import { OrderAddComponent } from './orders/order-add/order-add.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
+import { OrdersListResolver } from './orders/orders-list/orders-list.resolver';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,10 +19,13 @@ import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    OrdersListResolver
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
