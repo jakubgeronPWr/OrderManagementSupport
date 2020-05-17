@@ -9,13 +9,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
 import { OrdersListResolver } from './orders/orders-list/orders-list.resolver';
 import { HttpClientModule } from '@angular/common/http';
+import { OrderPanelComponent } from './orders/orders-list/order-panel/order-panel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrdersListComponent,
     OrderAddComponent,
-    NavBarComponent
+    NavBarComponent,
+    OrderPanelComponent
   ],
   imports: [
     BrowserModule,

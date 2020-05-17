@@ -5,7 +5,6 @@ import { OrdersListComponent } from './orders/orders-list/orders-list.component'
 import { OrdersListResolver } from './orders/orders-list/orders-list.resolver';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/orders', pathMatch: 'full' },
   {
     path: 'orders',
     component: OrdersListComponent,
