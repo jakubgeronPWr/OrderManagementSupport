@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using OrderManagementSupport.Data.Entities;
@@ -12,7 +9,7 @@ namespace OrderManagementSupport.Data
 {
     public class OrderManagementSeeder
     {
-        private OrderManagementContext _ctx;
+        private readonly OrderManagementContext _ctx;
         private readonly IWebHostEnvironment _hosting;
 
         public OrderManagementSeeder(OrderManagementContext ctx, IWebHostEnvironment hosting)

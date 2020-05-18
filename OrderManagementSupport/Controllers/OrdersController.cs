@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using OrderManagementSupport.Data;
 using OrderManagementSupport.Data.Entities;
@@ -15,16 +16,19 @@ namespace OrderManagementSupport.Controllers
     [Produces("application/json")]
     public class OrdersController : Controller
     {
-        private readonly IOrderManagementRepository _repository;
+        private readonly IOrdersRepository _repo;
+        private readonly IClientsRepository _clientsRepo;
         private readonly ILogger<OrdersController> _logger;
         private readonly IMapper _mapper;
 
-        public OrdersController(IOrderManagementRepository repository, ILogger<OrdersController> logger, IMapper mapper)
+        public OrdersController(IOrdersRepository repo, IClientsRepository clientRepo, ILogger<OrdersController> logger, IMapper mapper)
         {
-            _repository = repository;
+            _repo = repo;
             _logger = logger;
             _mapper = mapper;
+            _clientsRepo = clientRepo;
         }
+
 
         [HttpPost]
         public IActionResult PostOrder([FromBody]OrderEntityModel model)
@@ -34,16 +38,21 @@ namespace OrderManagementSupport.Controllers
                 if (ModelState.IsValid)
                 {
                     var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
+                    checkDataValidation(newOrder);
+                    if (!ModelState.IsValid)
+                        return BadRequest(ModelState);
 
-                    if (newOrder.OrderDate == DateTime.MinValue)
-                    {
-                        newOrder.OrderDate = DateTime.Now;
-                    }
-                    newOrder.Client = _repository
+                    var orderNumber = _repo
+                        .GetClientOrders(model.ClientId)
+                        .LastOrDefault()
+                        ?.OrderNumber;
+                    newOrder.OrderNumber = (orderNumber != null) ? (int.Parse(orderNumber) + 1).ToString() : "1";
+
+                    newOrder.Client = _clientsRepo
                         .GetAllClients()
                         .FirstOrDefault(c => c.Id == model.ClientId);
-                    _repository.AddOrder(newOrder);
-                    if (_repository.SaveAll())
+                    _repo.AddOrder(newOrder);
+                    if (_repo.SaveAll())
                     {
 
                         return Created($"/api/orders/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
@@ -61,6 +70,19 @@ namespace OrderManagementSupport.Controllers
             return BadRequest(("Failed to save new order"));
         }
 
+        private void checkDataValidation(Order order)
+        {
+            if (order.OrderDate < DateTime.Now.AddDays(-7) || order.OrderDate > DateTime.Now.AddDays(7))
+            {
+                ModelState.AddModelError("Errors", "Bad Order Date");
+            }
+
+            if (order.OrderRealizationDate < order.OrderDate || order.OrderRealizationDate > order.OrderDate.AddDays(90))
+            {
+                ModelState.AddModelError("Errors", "Bad Order Realization Date");
+            }
+        }
+
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -68,7 +90,7 @@ namespace OrderManagementSupport.Controllers
         {
             try
             {
-                var orders = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderEntityModel>>(_repository.GetAllOrders());
+                var orders = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderEntityModel>>(_repo.GetAllOrders());
                 return Ok(orders);
             }
             catch (Exception e)
@@ -76,7 +98,7 @@ namespace OrderManagementSupport.Controllers
                 _logger.LogError($"Failed to get orders: {e}");
                 return BadRequest(("Failed to get orders"));
             }
-            
+
         }
 
         [HttpGet("{id:int}")]
@@ -84,7 +106,7 @@ namespace OrderManagementSupport.Controllers
         {
             try
             {
-                var order = _repository.GetOrderById(id);
+                var order = _repo.GetOrderById(id);
 
                 if (order != null) return Ok(_mapper.Map<Order, OrderEntityModel>(order));
                 else return NotFound();
@@ -104,15 +126,15 @@ namespace OrderManagementSupport.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var order = _repository
+                    var order = _repo
                         .GetAllOrders()
                         .FirstOrDefault(o => o.Id == id);
                     if (order != null)
                     {
                         var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
                         newOrder.Id = id;
-                        _repository.ModifyOrder(newOrder);
-                        if (_repository.SaveAll())
+                        _repo.ModifyOrder(newOrder);
+                        if (_repo.SaveAll())
                         {
                             return Accepted($"/api/clients/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
                         }
@@ -135,9 +157,9 @@ namespace OrderManagementSupport.Controllers
         {
             try
             {
-                var order = _repository.DeleteOrderById(id);
+                var order = _repo.DeleteOrderById(id);
 
-                if (order != null && _repository.SaveAll()) return Accepted(_mapper.Map<Order, OrderEntityModel>(order));
+                if (order != null && _repo.SaveAll()) return Accepted(_mapper.Map<Order, OrderEntityModel>(order));
                 return NotFound();
             }
             catch (Exception e)

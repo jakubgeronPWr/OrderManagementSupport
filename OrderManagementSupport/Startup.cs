@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OrderManagementSupport.Data;
+using OrderManagementSupport.Data.Repositories;
 
 namespace OrderManagementSupport
 {
@@ -32,7 +33,8 @@ namespace OrderManagementSupport
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            services.AddScoped<IOrderManagementRepository, OrderManagementRepository>();
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IClientsRepository, ClientsRepository>();
 
             services.AddControllersWithViews();
             services.AddMvc()

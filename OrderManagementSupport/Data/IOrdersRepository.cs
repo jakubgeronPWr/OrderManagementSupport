@@ -3,22 +3,16 @@ using OrderManagementSupport.Data.Entities;
 
 namespace OrderManagementSupport.Data
 {
-    public interface IOrderManagementRepository
+    public interface IOrdersRepository
     {
         void AddOrder(object order);
         IEnumerable<Order> GetAllOrders();
+        IEnumerable<Order> GetClientOrders(int clientId);
+        IEnumerable<Order> GetOrdersByPagination(int paginationSize, int pageNumber);
         Order GetOrderById(int id);
         void ModifyOrder(Order order);
         Order DeleteOrderById(int id);
         IEnumerable<Order> GetAllOrdersSortedByCreationDate();
-
-        void AddClient(object client);
-        IEnumerable<Client> GetAllClients();
-        void ModifyClient(Client client);
-        Client DeleteClientById(int id);
-
         bool SaveAll();
-
-        
     }
 }

@@ -4,15 +4,15 @@
     "FirstName": "Janusz",
     "LastName": "Dusigrosz",
     "ZipCode": "50-108",
-    "City": "Wroc³aw",
-    "Address": "O³awska 48"
+    "City": "Wroclaw",
+    "Address": "Olawska 48"
   },
   {
     "Id": 0,
     "FirstName": "Sebix",
-    "LastName": "Szybkar¹czka",
+    "LastName": "Szybkaraczka",
     "ZipCode": "32-081",
-    "City": "Rzeszów",
+    "City": "Rzeszow",
     "Address": "Mickiewicza 52"
   }
 ]

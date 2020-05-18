@@ -13,11 +13,11 @@ namespace OrderManagementSupport.Controllers
     [Route("api/[Controller]")]
     public class ClientsController: Controller
     {
-        private readonly IOrderManagementRepository _repo;
+        private readonly IClientsRepository _repo;
         private readonly ILogger<ClientsController> _logger;
         private readonly IMapper _mapper;
 
-        public ClientsController(IOrderManagementRepository repo, ILogger<ClientsController> logger, IMapper mapper)
+        public ClientsController(IClientsRepository repo, ILogger<ClientsController> logger, IMapper mapper)
         {
             _repo = repo;
             _logger = logger;
@@ -35,6 +35,21 @@ namespace OrderManagementSupport.Controllers
             catch (Exception e)
             {
                 _logger.LogError($"Failed to get clients: {e}");
+                return BadRequest(("Failed to get clients"));
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<IEnumerable<Client>> GetClientsById(int id)
+        {
+            try
+            {
+                var client = _mapper.Map<Client, ClientEntityModel>(_repo.GetClientById(id));
+                return Ok(client);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to get client: {e}");
                 return BadRequest(("Failed to get client"));
             }
         }
