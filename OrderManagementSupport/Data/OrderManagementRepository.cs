@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using OrderManagementSupport.Data.Entities;
 
@@ -33,7 +30,7 @@ namespace OrderManagementSupport.Data
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to get all products: {ex}");
-                return null;
+                return Enumerable.Empty<Client>();
             }
         }
 
@@ -65,7 +62,7 @@ namespace OrderManagementSupport.Data
             catch (Exception ex)
             {
                 _logger.LogError($"Failed to get all products: {ex}" );
-                return null;
+                return Enumerable.Empty<Order>();
             }
         }
 

@@ -39,7 +39,9 @@ namespace OrderManagementSupport.Controllers
                     {
                         newOrder.OrderDate = DateTime.Now;
                     }
-                    newOrder.Client = _repository.GetAllClients().Where(c => c.Id == model.ClientId).FirstOrDefault();
+                    newOrder.Client = _repository
+                        .GetAllClients()
+                        .FirstOrDefault(c => c.Id == model.ClientId);
                     _repository.AddOrder(newOrder);
                     if (_repository.SaveAll())
                     {
