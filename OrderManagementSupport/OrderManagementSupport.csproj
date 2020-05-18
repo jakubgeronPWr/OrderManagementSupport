@@ -47,11 +47,4 @@
     <Message Text="* * * * * * BUILD DONE * * * * * *" Importance="High" />
   </Target>
 
-  <!--<ItemGroup>
-    <Content Remove="ClientApp\**" />
-    <Compile Remove="ClientApp\**" />
-    <EmbeddedResource Remove="ClientApp\**" />
-    <None Remove="ClientApp\**" />
-  </ItemGroup>-->
-
 </Project>
