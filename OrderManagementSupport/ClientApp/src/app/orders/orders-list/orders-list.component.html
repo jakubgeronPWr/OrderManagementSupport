@@ -1,6 +1,8 @@
 <section class="page">
     <h1>Orders</h1>
-    <app-order-panel *ngFor="let order of orders" [order]="order">
-    </app-order-panel>
-    <p *ngIf="!orders || orders.length === 0">No orders found</p>
-  </section>
+    <div class="card-group">
+      <app-order-panel *ngFor="let order of orders" [order]="order">
+      </app-order-panel>
+      <p *ngIf="!orders || orders.length === 0">No orders found</p>
+    </div>
+</section>
