@@ -1,8 +1,17 @@
 <section class="page">
-    <h1>Orders</h1>
-    <div class="card-group">
-      <app-order-panel *ngFor="let order of orders" [order]="order">
-      </app-order-panel>
-      <p *ngIf="!orders || orders.length === 0">No orders found</p>
+  <h1>Orders</h1>
+  <div class="card-group">
+    <app-order-panel *ngFor="let order of orders" [order]="order">
+    </app-order-panel>
+    <p *ngIf="!orders || orders.length === 0">No orders found</p>
+  </div>
+  <div class="card text-center m-3">
+    <h3 class="card-header">Angular 8 Pagination Example</h3>
+    <div class="card-body">
+      <div *ngFor="let item of pageOfItems">{{item.name}}</div>
     </div>
+    <div class="card-footer pb-0 pt-3">
+      <jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination>
+    </div>
+  </div>
 </section>
