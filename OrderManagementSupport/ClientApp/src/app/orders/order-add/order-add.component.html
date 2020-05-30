@@ -1,1 +1,44 @@
-<p>order-add works!</p>
+<form class="add-order-form">
+    <div class="card m-3">
+        <h3 class="card-header">Add Order</h3>
+        <div class="form-group">
+            <div class="form-group row">
+                <label for="serviceTextarea" class="col-2 col-form-label">Service</label>
+                <div class="col-10">
+                    <textarea class="form-control" id="serviceTextarea" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order-date-input" class="col-2 col-form-label">Order date</label>
+                <div class="col-10">
+                    <input class="form-control" type="date" value="{{ orderDate | date:'yyyy-MM-dd' }}"
+                        id="order-date-input">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="realization-date-input" class="col-2 col-form-label">Realization date</label>
+                <div class="col-10">
+                    <input class="form-control" type="date" value="{{ realizationDate | date:'yyyy-MM-dd' }}"
+                        id="realization-date-input">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="price-input" class="col-2 col-form-label">Price</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" id="price-input" min="0" step="0.01">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="price-input" class="col-2 col-form-label">Order payed</label>
+                <div class="col-10">
+                    <select class="form-control">
+                        <option disabled selected value> -- select an option -- </option>
+                        <option>yes</option>
+                        <option>no</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+    </div>
+</form>
