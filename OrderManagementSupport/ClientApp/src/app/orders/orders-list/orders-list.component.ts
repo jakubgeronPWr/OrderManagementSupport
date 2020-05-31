@@ -22,4 +22,8 @@ export class OrdersListComponent implements OnInit {
   onChangePage(pageOfItems: Array<any>){
     this.pageOfOrders = pageOfItems;
   }
+
+  deleteOrder(order: Order){
+    this.orders = this.orders.filter(x => x !== order);
+  }
 }

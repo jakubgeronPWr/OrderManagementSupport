@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Order } from '../../../shared/model/order';
 
 @Component({
@@ -11,13 +11,16 @@ export class OrderPanelComponent implements OnInit {
   @Input()
   order: Order;
 
+  @Output() 
+  delete: EventEmitter<any> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
   deleteOrder(){
-    console.log(this.order);
+    this.delete.emit(this.order);
   }
 
 }
