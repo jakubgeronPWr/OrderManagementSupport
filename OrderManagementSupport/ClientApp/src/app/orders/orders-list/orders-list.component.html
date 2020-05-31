@@ -2,7 +2,7 @@
   <div class="card m-3">
     <h3 class="card-header">Orders</h3>
     <div class="card-group">
-      <app-order-panel *ngFor="let order of orders" [order]="order">
+      <app-order-panel *ngFor="let order of pageOfOrders" [order]="order">
       </app-order-panel>
       <p *ngIf="!orders || orders.length === 0">No orders found</p>
     </div>

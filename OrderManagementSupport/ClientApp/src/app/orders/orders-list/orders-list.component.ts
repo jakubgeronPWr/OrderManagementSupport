@@ -19,7 +19,7 @@ export class OrdersListComponent implements OnInit {
     console.log(this.orders);
   }
 
-  onChangePage(pageOfOrders: Array<any>){
-    this.pageOfOrders = pageOfOrders;
+  onChangePage(pageOfItems: Array<any>){
+    this.pageOfOrders = pageOfItems;
   }
 }
