@@ -1,18 +1,11 @@
 <div class="order-panel">
-    <!-- <div>
-        <div>Order number: {{ order.orderNumber }}</div>
-        <div>Realization date: {{ order.orderRealizationDate }}</div>
-    </div>
-    <div>
-        <span class="material-icons">delete</span>
-    </div> -->
     <ng-template [ngIf]="order.isPayed" [ngIfElse]="isNotPayed">
-        <div class="card border-success mb-3" style="max-width: 18rem;">
+        <div class="card border-success" style="max-width: 18rem;">
             <div class="card-header">
                 <div class="payment-status">Payment status: Paid</div>
-                <div class="material-icons">
+                <button class="material-icons" type="button" (click)="deleteOrder()">
                     <span>delete</span>
-                </div>
+                </button>
             </div>
             <div class="card-body text-success">
                 <div class="card-text">{{ order.service }}</div>
@@ -23,12 +16,12 @@
     </ng-template>
 
     <ng-template #isNotPayed>
-        <div class="card border-danger mb-3" style="max-width: 18rem;">
+        <div class="card border-danger" style="max-width: 18rem;">
             <div class="card-header">
                 <div class="payment-status">Payment status: Unpaid</div>
-                <i class="material-icons">
+                <button class="material-icons" type="button" (click)="deleteOrder()">
                     <span>delete</span>
-                </i>
+                </button>
             </div>
             <div class="card-body text-danger">
                 <div class="card-text">{{ order.service }}</div>

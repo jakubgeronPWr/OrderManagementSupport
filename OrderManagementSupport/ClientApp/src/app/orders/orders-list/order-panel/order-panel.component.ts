@@ -16,4 +16,8 @@ export class OrderPanelComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  deleteOrder(){
+    console.log(this.order);
+  }
+
 }
