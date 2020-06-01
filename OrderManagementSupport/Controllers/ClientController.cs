@@ -49,7 +49,7 @@ namespace OrderManagementSupport.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to get client: {e}");
+                _logger.LogError($"Failed to get client by id {id}: {e}");
                 return BadRequest(("Failed to get client"));
             }
         }
@@ -65,20 +65,20 @@ namespace OrderManagementSupport.Controllers
                     _repo.AddClient(newClient);
                     if (_repo.SaveAll())
                     {
-
                         return Created($"/api/orders/{newClient.Id}", _mapper.Map<Client, ClientEntityModel>(newClient));
                     }
                 }
                 else
                 {
+                    _logger.LogError($"Failed to post client with wrong model: {ModelState}");
                     return BadRequest(ModelState);
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to post order: {e}");
+                _logger.LogError($"Failed to post client: {e}");
             }
-            return BadRequest(("Failed to save new order"));
+            return BadRequest(("Failed to save new client"));
         }
 
         [HttpPut("{id:int}")]
@@ -104,12 +104,13 @@ namespace OrderManagementSupport.Controllers
                 }
                 else
                 {
+                    _logger.LogError($"Failed to put client with id {id} by model validation: {ModelState}");
                     return BadRequest(ModelState);
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to put order: {e}");
+                _logger.LogError($"Failed to put client with id {id}: {e}");
             }
             return BadRequest(("Failed to edit order"));
         }
@@ -120,19 +121,19 @@ namespace OrderManagementSupport.Controllers
             try
             {
                 var client = _repo.DeleteClientById(id);
-
-                if (client != null && _repo.SaveAll()) return Accepted(_mapper.Map<Client, ClientEntityModel>(client));
+                if (client != null && _repo.SaveAll())
+                {
+                    return Accepted(_mapper.Map<Client, ClientEntityModel>(client));
+                }
                 return NotFound();
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to get orders: {e}");
-                return BadRequest(("Failed to get orders"));
+                _logger.LogError($"Failed to delete client with id {id} : {e}");
+                return BadRequest(($"Failed to delete client with id {id}"));
             }
 
         }
-
-
-
+        
     }
 }

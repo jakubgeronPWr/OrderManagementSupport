@@ -16,6 +16,9 @@ namespace OrderManagementSupport.Controllers
     [Produces("application/json")]
     public class OrdersController : Controller
     {
+        private readonly int MAXIMUM_REALIZATION_TIME_DAYS = 90;
+        private readonly int MAXIMUM_ORDER_BUFFER_TIME_DAYS = 7;
+
         private readonly IOrdersRepository _repo;
         private readonly IClientsRepository _clientsRepo;
         private readonly ILogger<OrdersController> _logger;
@@ -38,15 +41,17 @@ namespace OrderManagementSupport.Controllers
                 if (ModelState.IsValid)
                 {
                     var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
-                    checkDataValidation(newOrder);
+                    CheckDataValidation(newOrder);
                     if (!ModelState.IsValid)
+                    {
                         return BadRequest(ModelState);
+                    }
 
-                    var orderNumber = _repo
-                        .GetClientOrders(model.ClientId)
-                        .LastOrDefault()
-                        ?.OrderNumber;
-                    newOrder.OrderNumber = (orderNumber != null) ? (int.Parse(orderNumber) + 1).ToString() : "1";
+                    var client = _clientsRepo
+                        .GetClientById(model.ClientId);
+
+                    newOrder.OrderNumber =
+                        $"{client.FirstName.ToUpper().Take(1)}{client.LastName.ToUpper().Take(3)}-{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
 
                     newOrder.Client = _clientsRepo
                         .GetAllClients()
@@ -54,12 +59,12 @@ namespace OrderManagementSupport.Controllers
                     _repo.AddOrder(newOrder);
                     if (_repo.SaveAll())
                     {
-
                         return Created($"/api/orders/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
                     }
                 }
                 else
                 {
+                    _logger.LogDebug($"bad request from post order made by : {ModelState} ");
                     return BadRequest(ModelState);
                 }
             }
@@ -70,14 +75,14 @@ namespace OrderManagementSupport.Controllers
             return BadRequest(("Failed to save new order"));
         }
 
-        private void checkDataValidation(Order order)
+        private void CheckDataValidation(Order order)
         {
-            if (order.OrderDate < DateTime.Now.AddDays(-7) || order.OrderDate > DateTime.Now.AddDays(7))
+            if (order.OrderDate < DateTime.Now.AddDays(-MAXIMUM_ORDER_BUFFER_TIME_DAYS) || order.OrderDate > DateTime.Now.AddDays(MAXIMUM_ORDER_BUFFER_TIME_DAYS))
             {
                 ModelState.AddModelError("Errors", "Bad Order Date");
             }
 
-            if (order.OrderRealizationDate < order.OrderDate || order.OrderRealizationDate > order.OrderDate.AddDays(90))
+            if (order.OrderRealizationDate < order.OrderDate || order.OrderRealizationDate > order.OrderDate.AddDays(MAXIMUM_REALIZATION_TIME_DAYS))
             {
                 ModelState.AddModelError("Errors", "Bad Order Realization Date");
             }
@@ -108,13 +113,19 @@ namespace OrderManagementSupport.Controllers
             {
                 var order = _repo.GetOrderById(id);
 
-                if (order != null) return Ok(_mapper.Map<Order, OrderEntityModel>(order));
-                else return NotFound();
+                if (order != null)
+                {
+                    return Ok(_mapper.Map<Order, OrderEntityModel>(order));
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to get orders: {e}");
-                return BadRequest(("Failed to get orders"));
+                _logger.LogError($"Failed to get order with id {id}: {e}");
+                return BadRequest(($"Failed to get order with id {id}"));
             }
 
         }
@@ -147,9 +158,9 @@ namespace OrderManagementSupport.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to put order: {e}");
+                _logger.LogError($"Failed to put order with id {id}: {e}");
             }
-            return BadRequest(("Failed to edit order"));
+            return BadRequest(($"Failed to edit order with id {id}"));
         }
 
         [HttpDelete("{id:int}")]
@@ -159,13 +170,16 @@ namespace OrderManagementSupport.Controllers
             {
                 var order = _repo.DeleteOrderById(id);
 
-                if (order != null && _repo.SaveAll()) return Accepted(_mapper.Map<Order, OrderEntityModel>(order));
+                if (order != null && _repo.SaveAll())
+                {
+                    return Accepted(_mapper.Map<Order, OrderEntityModel>(order));
+                }
                 return NotFound();
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to get orders: {e}");
-                return BadRequest(("Failed to get orders"));
+                _logger.LogError($"Failed to delete order with id {id}: {e}");
+                return BadRequest(($"Failed to delete order with id {id}"));
             }
 
         }
