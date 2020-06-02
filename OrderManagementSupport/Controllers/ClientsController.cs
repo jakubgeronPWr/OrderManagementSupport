@@ -45,7 +45,15 @@ namespace OrderManagementSupport.Controllers
             try
             {
                 var client = _mapper.Map<Client, ClientEntityModel>(_repo.GetClientById(id));
-                return Ok(client);
+                if (client != null)
+                {
+                    return Ok(client);
+                }
+                else
+                {
+                    return NotFound();
+                }
+                
             }
             catch (Exception e)
             {

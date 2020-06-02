@@ -11,6 +11,7 @@ namespace OrderManagementSupport.Contracts
         public static class Clients
         {
             public const string GetAll = "api/clients";
+            public const string GetById = "api/clients/";
             public const string Post = "api/clients";
             public const string Delete = "api/clients/";
         }

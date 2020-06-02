@@ -19,18 +19,37 @@ namespace OrderManagementSupport.Tests.IntegrationTests
 {
     public class ClientControllerTests: IntegrationTest
     {
-        //[Fact]
-        //public async Task GetAll_WithoutAnyPosts_ReturnEmptyResponse()
-        //{
-        //    //Arrange
+        [Fact]
+        public async Task GetAll_WithoutAnyPosts_ReturnEmptyResponse()
+        {
+            //Arrange
 
-        //    //Act
-        //    var response = await TestClient.GetAsync(ApiRoutes.Clients.GetAll);
+            //Act
+            var response = await TestClient.GetAsync(ApiRoutes.Clients.GetAll);
 
-        //    //Assert
-        //    response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        //    (await response.Content.ReadAsStringAsync()).Should().BeEmpty();
-        //}
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            List<Client> clients;
+            using (var sr = new StringReader(await response.Content.ReadAsStringAsync()))
+            {
+                var clientsOnServer = JsonConvert.DeserializeObject<List<Client>>(sr.ReadToEnd());
+                clients = clientsOnServer;
+            }
+            clients.Should().BeEmpty( $"not empty {await response.Content.ReadAsStringAsync()}");
+        }
+
+        [Fact]
+        public async Task GetById_WithoutAnyPosts_ReturnNotFound()
+        {
+            //Arrange
+
+            //Act
+            var response = await TestClient.GetAsync($"{ApiRoutes.Clients.GetAll}4");
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            (await response.Content.ReadAsStringAsync()).Should().BeEmpty($"not empty {await response.Content.ReadAsStringAsync()}");
+        }
 
         [Fact]
         public async Task GetAll_WithOnePosts_ReturnNonEmptyResponse()
