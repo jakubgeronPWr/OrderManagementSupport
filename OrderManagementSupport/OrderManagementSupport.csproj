@@ -41,10 +41,10 @@
     </PackageReference>
   </ItemGroup>
 
-  <Target Name="BuildAngular" BeforeTargets="Build">
+  <!--<Target Name="BuildAngular" BeforeTargets="Build">
     <Message Text="* * * * * * ANGULAR BUILD * * * * * *" Importance="High" />
     <Exec WorkingDirectory="ClientApp" Command="npm run-script build" />
     <Message Text="* * * * * * BUILD DONE * * * * * *" Importance="High" />
-  </Target>
+  </Target>-->
 
 </Project>
