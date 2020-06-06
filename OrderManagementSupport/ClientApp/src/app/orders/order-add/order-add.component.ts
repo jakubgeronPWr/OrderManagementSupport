@@ -12,6 +12,10 @@ export class OrderAddComponent implements OnInit {
   orderDate = new Date();
   realizationDate = new Date();
 
+  addOrder(orderForm: string){
+    console.log(orderForm)
+  }
+
   ngOnInit(): void {
     this.realizationDate.setDate(this.realizationDate.getDate() + 3);
   }
