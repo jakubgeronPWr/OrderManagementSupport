@@ -18,6 +18,8 @@ namespace OrderManagementSupport.EntityModel
         public double Price { get; set; }
         [DefaultValue(false)]
         public bool IsPayed { get; set; }
+        [DefaultValue(false)]
+        public bool IsDone { get; set; }
         public int ClientId { get; set; }
     }
 }

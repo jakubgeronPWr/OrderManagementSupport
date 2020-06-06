@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OrderManagementSupport.Contracts;
@@ -17,7 +16,7 @@ using Xunit;
 
 namespace OrderManagementSupport.Tests.IntegrationTests
 {
-    public class ClientControllerTests: IntegrationTest
+    public class OrdersControllerTests: IntegrationTest
     {
         [Fact]
         public async Task GetAll_WithoutAnyPosts_ReturnEmptyResponse()
@@ -25,47 +24,32 @@ namespace OrderManagementSupport.Tests.IntegrationTests
             //Arrange
 
             //Act
-            var response = await TestClient.GetAsync(ApiRoutes.Clients.GetAll);
+            var response = await TestClient.GetAsync(ApiRoutes.Orders.GetAll);
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            List<Client> clients;
+            List<Order> orders;
             using (var sr = new StringReader(await response.Content.ReadAsStringAsync()))
             {
-                var clientsOnServer = JsonConvert.DeserializeObject<List<Client>>(sr.ReadToEnd());
-                clients = clientsOnServer;
+                var ordersOnServer = JsonConvert.DeserializeObject<List<Order>>(sr.ReadToEnd());
+                orders = ordersOnServer;
             }
-            clients.Should().BeEmpty( $"is empty {await response.Content.ReadAsStringAsync()}");
-        }
-
-        [Fact]
-        public async Task GetById_WithoutAnyPosts_ReturnNotFound()
-        {
-            //Arrange
-
-            //Act
-            var response = await TestClient.GetAsync($"{ApiRoutes.Clients.GetAll}4");
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            (await response.Content.ReadAsStringAsync()).Should().BeEmpty($"is empty {await response.Content.ReadAsStringAsync()}");
+            orders.Should().BeEmpty($"is empty {await response.Content.ReadAsStringAsync()}");
         }
 
         [Fact]
         public async Task GetAll_WithOnePosts_ReturnNonEmptyResponse()
         {
             //Arrange
-            var request = new ClientEntityModel()
+            var request = new OrderEntityModel()
             {
-                Address = "Street",
-                City = "City",
-                FirstName = "Test",
-                Id = 0,
-                LastName = "Test",
-                ZipCode = "53-300"
+                OrderId  = 0,
+                ClientId = 0,
+                Price = 19.99,
+                OrderNumber = "JJ"
             };
-            var addedClient = await CreateClientAsync(request);
-            
+            var addedClient = await CreateOrderAsync(request);
+
             //Act
             var response = await TestClient.GetAsync(ApiRoutes.Clients.GetAll);
 
@@ -87,15 +71,17 @@ namespace OrderManagementSupport.Tests.IntegrationTests
             deleteAfterTest.StatusCode.Should().Be(HttpStatusCode.Accepted, "CLEAN ADDED CLIENT AFTER TEST ERROR");
         }
 
-        private async Task<Client> CreateClientAsync(ClientEntityModel request)
+
+
+        private async Task<Order> CreateOrderAsync(OrderEntityModel request)
         {
             var serializerSettings = new JsonSerializerSettings();
             serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             var myContent = JsonConvert.SerializeObject(request, serializerSettings);
             var stringContent = new StringContent(myContent, Encoding.UTF8, "application/json");
-            var response =  await TestClient.PostAsync(ApiRoutes.Clients.Post, stringContent);
+            var response = await TestClient.PostAsync(ApiRoutes.Clients.Post, stringContent);
 
-            return JsonConvert.DeserializeObject<Client>(await response.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<Order>(await response.Content.ReadAsStringAsync());
         }
 
     }

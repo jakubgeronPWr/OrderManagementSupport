@@ -11,6 +11,7 @@ namespace OrderManagementSupport.Data.Entities
         public string Service { get; set; }
         public double Price { get; set; }
         public bool IsPayed { get; set; }
+        public bool IsDone { get; set; } 
         public Client Client { get; set; }
     }
 }
