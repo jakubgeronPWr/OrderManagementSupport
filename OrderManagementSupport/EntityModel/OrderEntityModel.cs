@@ -8,7 +8,9 @@ namespace OrderManagementSupport.EntityModel
     {
         public int OrderId { get; set; }
         public string OrderNumber { get; set; }
+        [Required]
         public DateTime OrderDate { get; set; }
+        [Required]
         public DateTime OrderRealizationDate { get; set; }
         [Required]
         [MinLength(6)]
@@ -16,6 +18,8 @@ namespace OrderManagementSupport.EntityModel
         public double Price { get; set; }
         [DefaultValue(false)]
         public bool IsPayed { get; set; }
+        [DefaultValue(false)]
+        public bool IsDone { get; set; }
         public int ClientId { get; set; }
     }
 }

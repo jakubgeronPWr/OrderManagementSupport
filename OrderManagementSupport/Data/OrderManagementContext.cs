@@ -13,10 +13,10 @@ namespace OrderManagementSupport.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Order> Orders{ get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
 
-        }
+        //}
     }
 }
