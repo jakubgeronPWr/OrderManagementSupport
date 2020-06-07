@@ -8,7 +8,7 @@ namespace OrderManagementSupport.Data
         void AddClient(object client);
         IEnumerable<Client> GetAllClients();
         Client GetClientById(int id);
-        void ModifyClient(Client client);
+        Client ModifyClient(Client client);
         Client DeleteClientById(int id);
 
         bool SaveAll();

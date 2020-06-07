@@ -84,19 +84,115 @@ namespace OrderManagementSupport.Tests.IntegrationTests
             Assert.True(clients.Exists(c => c.LastName == "Test"));
 
             var deleteAfterTest = await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + addedClient.Id);
-            deleteAfterTest.StatusCode.Should().Be(HttpStatusCode.Accepted, "CLEAN ADDED CLIENT AFTER TEST ERROR");
+            deleteAfterTest.StatusCode.Should().Be(HttpStatusCode.Accepted, "There is Client on DB");
         }
 
-        private async Task<Client> CreateClientAsync(ClientEntityModel request)
+        [Fact]
+        public async Task Post_WithGoodRequest_ReturnCreated()
         {
+            //Arrange
+            var request = CreateTestClientEntityModel();
+            //Act
             var serializerSettings = new JsonSerializerSettings();
             serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             var myContent = JsonConvert.SerializeObject(request, serializerSettings);
             var stringContent = new StringContent(myContent, Encoding.UTF8, "application/json");
-            var response =  await TestClient.PostAsync(ApiRoutes.Clients.Post, stringContent);
 
-            return JsonConvert.DeserializeObject<Client>(await response.Content.ReadAsStringAsync());
+            var response = await TestClient.PostAsync(ApiRoutes.Clients.Post, stringContent);
+
+            var newClient = JsonConvert.DeserializeObject<Client>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Created, "post was successful");
+            newClient.LastName.Should().Be(request.LastName, "post should not change data");
+            newClient.FirstName.Should().Be(request.FirstName, "post should not change data");
+
+            //After
+            await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + newClient.Id);
+
         }
+
+        [Fact]
+        public async Task Post_WithEmptyRequest_ReturnBadRequest()
+        {
+            //Arrange
+            //Act
+            var stringContent = new StringContent("", Encoding.UTF8, "application/json");
+
+            var response = await TestClient.PostAsync(ApiRoutes.Clients.Post, stringContent);
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest, "no post");
+
+            //After
+        }
+
+        [Fact]
+        public async Task Put_WithGoodRequest_ReturnOK()
+        {
+            var changedData = "Changed Last Name";
+            //Arrange
+            var request = CreateTestClientEntityModel();
+            var newClient = await CreateClientAsync(request);
+            //Act
+            var newRequest = request;
+            newRequest.Id = newClient.Id;
+            newRequest.LastName = changedData;
+            var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            var myContent = JsonConvert.SerializeObject(newRequest, serializerSettings);
+            var stringContent = new StringContent(myContent, Encoding.UTF8, "application/json");
+
+            var response = await TestClient.PutAsync(ApiRoutes.Clients.Put + newClient.Id, stringContent );
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Accepted, "post was successful");
+            Client clientOnServer;
+            using (var sr = new StringReader(await response.Content.ReadAsStringAsync()))
+            {
+                clientOnServer = JsonConvert.DeserializeObject<Client>(sr.ReadToEnd());
+            }
+            clientOnServer.LastName.Should().Be(changedData, "post should changed data");
+
+            //After
+            var cat = await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + newClient.Id);
+            cat.StatusCode.Should().Be(HttpStatusCode.Accepted);
+        }
+
+        [Fact]
+        public async Task Delete_WithExistingId_ReturnAccepted()
+        {
+            //Arrange
+            var request = CreateTestClientEntityModel();
+            var newClient = CreateClientAsync(request);
+
+            //Act
+            var response = await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + newClient.Id);
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Accepted, "delete done");
+            var cat = await TestClient.GetAsync($"{ApiRoutes.Clients.GetAll}{newClient.Id}");
+            cat.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Delete_WithNoClients_ReturnNotFound()
+        {
+            //Arrange
+            var id = 1;
+
+            //Act
+            var response = await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + id);
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound, "not found client to delete");
+
+            //After
+        }
+
+
+
+
 
     }
 }

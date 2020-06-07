@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using OrderManagementSupport.Contracts;
 using OrderManagementSupport.Data;
+using OrderManagementSupport.Data.Entities;
+using OrderManagementSupport.EntityModel;
 
 namespace OrderManagementSupport.Tests.IntegrationTests
 {
@@ -52,6 +58,29 @@ namespace OrderManagementSupport.Tests.IntegrationTests
             dbContextOptionsBuilder.UseApplicationServiceProvider(applicationServiceProvider);
             optionsAction?.Invoke(applicationServiceProvider, dbContextOptionsBuilder);
             return dbContextOptionsBuilder.Options;
+        }
+
+        protected async Task<Client> CreateClientAsync(ClientEntityModel request)
+        {
+            var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            var myContent = JsonConvert.SerializeObject(request, serializerSettings);
+            var stringContent = new StringContent(myContent, Encoding.UTF8, "application/json");
+            var response = await TestClient.PostAsync(ApiRoutes.Clients.Post, stringContent);
+
+            return JsonConvert.DeserializeObject<Client>(await response.Content.ReadAsStringAsync());
+        }
+        protected ClientEntityModel CreateTestClientEntityModel()
+        {
+            return new ClientEntityModel()
+            {
+                Address = "Street",
+                City = "City",
+                FirstName = "Test",
+                Id = 0,
+                LastName = "Test",
+                ZipCode = "53-300"
+            };
         }
     }
 }

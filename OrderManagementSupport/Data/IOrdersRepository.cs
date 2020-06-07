@@ -10,7 +10,7 @@ namespace OrderManagementSupport.Data
         IEnumerable<Order> GetClientOrders(int clientId);
         IEnumerable<Order> GetOrdersByPagination(int paginationSize, int pageNumber);
         Order GetOrderById(int id);
-        void ModifyOrder(Order order);
+        Order ModifyOrder(Order order);
         Order DeleteOrderById(int id);
         IEnumerable<Order> GetAllOrdersSortedByCreationDate();
         bool SaveAll();

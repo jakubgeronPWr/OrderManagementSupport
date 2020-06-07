@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -96,18 +95,12 @@ namespace OrderManagementSupport.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var client = _repo
-                        .GetAllClients()
-                        .FirstOrDefault(c => c.Id == id);
-                    if (client != null)
+                    model.Id = id;
+                    var newClient = _mapper.Map<ClientEntityModel, Client>(model);
+                    _repo.ModifyClient(newClient);
+                    if (_repo.SaveAll())
                     {
-                        var newClient = _mapper.Map<ClientEntityModel, Client>(model);
-                        newClient.Id = id;
-                        _repo.ModifyClient(newClient);
-                        if (_repo.SaveAll())
-                        {
-                            return Accepted($"/api/clients/{newClient.Id}", _mapper.Map<Client, ClientEntityModel>(newClient));
-                        }
+                        return Accepted($"/api/clients/{newClient.Id}", _mapper.Map<Client, ClientEntityModel>(newClient));
                     }
                 }
                 else
@@ -120,7 +113,7 @@ namespace OrderManagementSupport.Controllers
             {
                 _logger.LogError($"Failed to put client with id {id}: {e}");
             }
-            return BadRequest(("Failed to edit order"));
+            return BadRequest("Failed to edit client");
         }
 
         [HttpDelete("{id:int}")]
@@ -142,6 +135,5 @@ namespace OrderManagementSupport.Controllers
             }
 
         }
-        
     }
 }

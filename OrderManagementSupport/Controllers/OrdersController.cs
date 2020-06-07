@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using OrderManagementSupport.Data;
 using OrderManagementSupport.Data.Entities;
 using OrderManagementSupport.EntityModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OrderManagementSupport.Controllers
 {
@@ -50,8 +49,11 @@ namespace OrderManagementSupport.Controllers
                     var client = _clientsRepo
                         .GetClientById(model.ClientId);
 
+                    string firsName = client.FirstName.ToUpper();
+                    string lastName = client.LastName.ToUpper();
+                    
                     newOrder.OrderNumber =
-                        $"{client.FirstName.ToUpper().Take(1)}{client.LastName.ToUpper().Take(3)}-{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
+                        $"{firsName[0]}{lastName.Substring(0, 3)}-{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
 
                     newOrder.Client = _clientsRepo
                         .GetAllClients()

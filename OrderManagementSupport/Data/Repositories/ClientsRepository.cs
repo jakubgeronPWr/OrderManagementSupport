@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OrderManagementSupport.Data.Entities;
 
@@ -55,9 +56,15 @@ namespace OrderManagementSupport.Data.Repositories
             }
         }
 
-        public void ModifyClient(Client client)
+        public Client ModifyClient(Client client)
         {
-            _ctx.Update(client);
+            _ctx.Entry(client).State = EntityState.Modified;
+            var entity = _ctx.Clients.FirstOrDefault(item => item.Id == client.Id);
+            if (entity != null)
+            {
+                entity = client;
+            }
+            return entity;
         }
 
         public Client DeleteClientById(int id)

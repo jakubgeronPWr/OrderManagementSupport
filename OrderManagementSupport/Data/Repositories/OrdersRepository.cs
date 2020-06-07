@@ -87,16 +87,24 @@ namespace OrderManagementSupport.Data.Repositories
             }
         }
 
-        public void ModifyOrder(Order order)
+        public Order ModifyOrder(Order order)
         {
-            _ctx.Update(order);
+            _ctx.Entry(order).State = EntityState.Modified;
+            var entity = _ctx.Orders.FirstOrDefault(item => item.Id == order.Id);
+            if (entity != null)
+            {
+                entity = order;
+            }
+            return entity;
         }
 
         public Order DeleteOrderById(int id)
         {
             try
             {
-                var order = _ctx.Orders.Where(o => o.Id == id).FirstOrDefault();
+                var order = _ctx.Orders
+                    .Include(o => o.Client)
+                    .FirstOrDefault(o => o.Id == id);
                 _ctx.Remove(order);
                 return order;
             }
