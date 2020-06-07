@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-order-add',
@@ -7,17 +8,41 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class OrderAddComponent implements OnInit {
 
-  constructor() { }
+  orderForm: FormGroup;
+  
+  // now = new Date();
+  // realizationDate = new Date();
+  service: AbstractControl;
+  orderDate: AbstractControl;
+  realizationDate: AbstractControl;
+  price: AbstractControl;
+  isPayed: AbstractControl;
+  
 
-  orderDate = new Date();
-  realizationDate = new Date();
+  constructor(formBuilder: FormBuilder) {
+    this.orderForm = formBuilder.group({
+      'service': ['', Validators.required],
+      'orderDate': [new Date(), Validators.required],
+      'realizationDate': ['', Validators.required],
+      'price': ['', Validators.required],
+      'isPayed': ['', Validators.required]
+    });
 
-  addOrder(orderForm: string){
-    console.log(orderForm)
+   this.service = this.orderForm.controls['service'];
+   this.orderDate = this.orderForm.controls['orderDate'];
+   this.realizationDate = this.orderForm.controls['realizationDate'];
+   this.price = this.orderForm.controls['price'];
+   this.isPayed = this.orderForm.controls['isPayed'];
+  }
+
+  onSubmit(value: String): void{
+    console.log(value)
   }
 
   ngOnInit(): void {
-    this.realizationDate.setDate(this.realizationDate.getDate() + 3);
+    // this.realizationDate.setDate(this.realizationDate.getDate() + 3);
+    // this.orderDate = new Date(); //.toISOString().substring(0, 10);
+    // this.orderForm.controls['orderForm'].setValue(this.orderDate);
   }
 
 }
