@@ -19,6 +19,13 @@ namespace OrderManagementSupport.Tests.IntegrationTests
     public class OrdersControllerTests: IntegrationTest
     {
         private String TEST_SERVICE_MESSAGE = "TestService";
+        private JsonSerializerSettings serializerSettings;
+
+        public OrdersControllerTests()
+        {
+            serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        }
 
         [Fact]
         public async Task GetAll_WithoutAnyPosts_ReturnEmptyResponse()
@@ -76,8 +83,8 @@ namespace OrderManagementSupport.Tests.IntegrationTests
             var newClient = await CreateClientAsync(CreateTestClientEntityModel());
             var request = CreateOrderForTests(newClient.Id);
             //Act
-            var serializerSettings = new JsonSerializerSettings();
-            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //var serializerSettings = new JsonSerializerSettings();
+            //serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             var myContent = JsonConvert.SerializeObject(request, serializerSettings);
             var stringContent = new StringContent(myContent, Encoding.UTF8, "application/json");
             var response = await TestClient.PostAsync(ApiRoutes.Orders.Post, stringContent);
@@ -99,8 +106,104 @@ namespace OrderManagementSupport.Tests.IntegrationTests
             var cat = await TestClient.DeleteAsync(ApiRoutes.Orders.Delete + createdOrder.OrderId);
             var catClient = await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + createdOrder.ClientId);
             cat.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            catClient.StatusCode.Should().Be(HttpStatusCode.Accepted);
         }
 
+        [Fact]
+        public async Task Post_WithEmptyRequest_ReturnBadRequest()
+        {
+            //Arrange
+
+            //Act
+            //var serializerSettings = new JsonSerializerSettings();
+            //serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            var stringContent = new StringContent("", Encoding.UTF8, "application/json");
+            var response = await TestClient.PostAsync(ApiRoutes.Orders.Post, stringContent);
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Put_WithGoodRequest_ReturnCreated()
+        {
+            //Arrange
+            var newClient = await CreateClientAsync(CreateTestClientEntityModel());
+            var newOrder =  await CreateOrderAsync(CreateOrderForTests(newClient.Id));
+            //Act
+            newOrder.IsPayed = true;
+            newOrder.IsDone = true;
+            
+            var myContent = JsonConvert.SerializeObject(newOrder, serializerSettings);
+            var stringContent = new StringContent(myContent, Encoding.UTF8, "application/json");
+            var response = await TestClient.PutAsync(ApiRoutes.Orders.Put+newOrder.OrderId, stringContent);
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            var editedOrder = JsonConvert.DeserializeObject<OrderEntityModel>(await response.Content.ReadAsStringAsync());
+            editedOrder.IsPayed.Should().Be(true);
+            editedOrder.IsDone.Should().Be(true);
+
+            //After
+            var cat = await TestClient.DeleteAsync(ApiRoutes.Orders.Delete + editedOrder.OrderId);
+            var catClient = await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + editedOrder.ClientId);
+            cat.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            catClient.StatusCode.Should().Be(HttpStatusCode.Accepted);
+        }
+
+        [Fact]
+        public async Task Put_WithBadRequest_ReturnCreated()
+        {
+            //Arrange
+            var newClient = await CreateClientAsync(CreateTestClientEntityModel());
+            var newOrder = await CreateOrderAsync(CreateOrderForTests(newClient.Id));
+            //Act
+            newOrder.IsPayed = true;
+            newOrder.IsDone = true;
+
+            var stringContent = new StringContent("{\"isDone\" : true}", Encoding.UTF8, "application/json");
+            var response = await TestClient.PutAsync(ApiRoutes.Orders.Put + newOrder.OrderId, stringContent);
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            var editedOrder = JsonConvert.DeserializeObject<OrderEntityModel>(await response.Content.ReadAsStringAsync());
+            editedOrder.IsDone.Should().Be(false);
+
+            //After
+            var cat = await TestClient.DeleteAsync(ApiRoutes.Orders.Delete + newOrder.OrderId);
+            var catClient = await TestClient.DeleteAsync(ApiRoutes.Clients.Delete + newOrder.ClientId);
+            cat.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            catClient.StatusCode.Should().Be(HttpStatusCode.Accepted);
+        }
+
+        [Fact]
+        public async Task Delete_WithEarlierRequest_ReturnAccepted()
+        {
+            //Arrange
+            var newClient = await CreateClientAsync(CreateTestClientEntityModel());
+            var newOrder = await CreateOrderAsync(CreateOrderForTests(newClient.Id));
+            //Act
+            var response = await TestClient.DeleteAsync(ApiRoutes.Orders.Delete+newOrder.OrderId);
+            var getResponse = await TestClient.GetAsync(ApiRoutes.Orders.GetById + newOrder.OrderId);
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+
+        [Fact]
+        public async Task Delete_WithEmptyRequest_ReturnNotFound()
+        {
+            //Arrange
+            var id = 1;
+
+            //Act
+            var response = await TestClient.DeleteAsync($"{ApiRoutes.Orders.Delete}{id}");
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
 
 
         private async Task<OrderEntityModel> CreateOrderAsync(OrderEntityModel request)

@@ -33,7 +33,7 @@ namespace OrderManagementSupport.Controllers
 
 
         [HttpPost]
-        public IActionResult PostOrder([FromBody]OrderEntityModel model)
+        public IActionResult PostOrder([FromBody] OrderEntityModel model)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace OrderManagementSupport.Controllers
 
                     string firsName = client.FirstName.ToUpper();
                     string lastName = client.LastName.ToUpper();
-                    
+
                     newOrder.OrderNumber =
                         $"{firsName[0]}{lastName.Substring(0, 3)}-{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
 
@@ -133,24 +133,18 @@ namespace OrderManagementSupport.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult PutOrder(int id, [FromBody]OrderEntityModel model)
+        public IActionResult PutOrder(int id, [FromBody] OrderEntityModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var order = _repo
-                        .GetAllOrders()
-                        .FirstOrDefault(o => o.Id == id);
-                    if (order != null)
+                    var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
+                    newOrder.Id = id;
+                    _repo.ModifyOrder(newOrder);
+                    if (_repo.SaveAll())
                     {
-                        var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
-                        newOrder.Id = id;
-                        _repo.ModifyOrder(newOrder);
-                        if (_repo.SaveAll())
-                        {
-                            return Accepted($"/api/clients/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
-                        }
+                        return Accepted($"/api/clients/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
                     }
                 }
                 else
