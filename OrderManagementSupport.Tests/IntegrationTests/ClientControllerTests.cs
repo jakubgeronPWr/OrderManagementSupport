@@ -17,6 +17,7 @@ using Xunit;
 
 namespace OrderManagementSupport.Tests.IntegrationTests
 {
+    [Collection("Sequential")]
     public class ClientControllerTests: IntegrationTest
     {
         [Fact]

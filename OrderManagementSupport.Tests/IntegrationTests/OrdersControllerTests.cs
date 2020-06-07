@@ -16,6 +16,7 @@ using Xunit;
 
 namespace OrderManagementSupport.Tests.IntegrationTests
 {
+    [Collection("Sequential")]
     public class OrdersControllerTests: IntegrationTest
     {
         private String TEST_SERVICE_MESSAGE = "TestService";

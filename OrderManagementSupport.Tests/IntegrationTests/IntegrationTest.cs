@@ -14,9 +14,11 @@ using OrderManagementSupport.Contracts;
 using OrderManagementSupport.Data;
 using OrderManagementSupport.Data.Entities;
 using OrderManagementSupport.EntityModel;
+using Xunit;
 
 namespace OrderManagementSupport.Tests.IntegrationTests
 {
+    [Collection("Sequential")]
     public class IntegrationTest
     {
         protected readonly HttpClient TestClient;
