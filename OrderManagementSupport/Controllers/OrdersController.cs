@@ -37,37 +37,36 @@ namespace OrderManagementSupport.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
-                    CheckDataValidation(newOrder);
-                    if (!ModelState.IsValid)
-                    {
-                        return BadRequest(ModelState);
-                    }
-
-                    var client = _clientsRepo
-                        .GetClientById(model.ClientId);
-
-                    string firsName = client.FirstName.ToUpper();
-                    string lastName = client.LastName.ToUpper();
-
-                    newOrder.OrderNumber =
-                        $"{firsName[0]}{lastName.Substring(0, 3)}-{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
-
-                    newOrder.Client = _clientsRepo
-                        .GetAllClients()
-                        .FirstOrDefault(c => c.Id == model.ClientId);
-                    _repo.AddOrder(newOrder);
-                    if (_repo.SaveAll())
-                    {
-                        return Created($"/api/orders/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
-                    }
-                }
-                else
+                var newOrder = _mapper.Map<OrderEntityModel, Order>(model);
+                CheckDataValidation(newOrder);
+                if (!ModelState.IsValid)
                 {
                     _logger.LogDebug($"bad request from post order made by : {ModelState} ");
                     return BadRequest(ModelState);
+                }
+
+                var client = _clientsRepo
+                    .GetClientById(model.ClientId);
+
+                if (client == null)
+                {
+                    ModelState.AddModelError("Errors", "Client is not in Data Base" );
+                    return BadRequest(ModelState);
+                }
+
+                string firsName = client.FirstName.ToUpper();
+                string lastName = client.LastName.ToUpper();
+
+                newOrder.OrderNumber =
+                    $"{firsName[0]}{lastName.Substring(0, 3)}-{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}";
+
+                newOrder.Client = _clientsRepo
+                    .GetAllClients()
+                    .FirstOrDefault(c => c.Id == model.ClientId);
+                _repo.AddOrder(newOrder);
+                if (_repo.SaveAll())
+                {
+                    return Created($"/api/orders/{newOrder.Id}", _mapper.Map<Order, OrderEntityModel>(newOrder));
                 }
             }
             catch (Exception e)
@@ -81,12 +80,12 @@ namespace OrderManagementSupport.Controllers
         {
             if (order.OrderDate < DateTime.Now.AddDays(-MAXIMUM_ORDER_BUFFER_TIME_DAYS) || order.OrderDate > DateTime.Now.AddDays(MAXIMUM_ORDER_BUFFER_TIME_DAYS))
             {
-                ModelState.AddModelError("Errors", "Bad Order Date");
+                ModelState.AddModelError("Errors", "Bad Order Date - can be +/- 7 days from now ");
             }
 
             if (order.OrderRealizationDate < order.OrderDate || order.OrderRealizationDate > order.OrderDate.AddDays(MAXIMUM_REALIZATION_TIME_DAYS))
             {
-                ModelState.AddModelError("Errors", "Bad Order Realization Date");
+                ModelState.AddModelError("Errors", "Bad Order Realization Date - should be not less then order date and can be only 90 days after");
             }
         }
 
