@@ -6,5 +6,6 @@ export interface Order {
   service: string;
   price: number;
   isPayed: boolean;
+  isDone: boolean;
   clientId: number;
 }

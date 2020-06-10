@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Order } from '../../shared/model/order';
 
 @Component({
   selector: 'app-order-add',
@@ -10,39 +12,47 @@ export class OrderAddComponent implements OnInit {
 
   orderForm: FormGroup;
   
-  // now = new Date();
-  // realizationDate = new Date();
   service: AbstractControl;
+  clientId: AbstractControl;
   orderDate: AbstractControl;
-  realizationDate: AbstractControl;
+  orderRealizationDate: AbstractControl;
   price: AbstractControl;
   isPayed: AbstractControl;
+  isDone: AbstractControl;
   
 
-  constructor(formBuilder: FormBuilder) {
+  constructor(formBuilder: FormBuilder, private readonly http: HttpClient) {
     this.orderForm = formBuilder.group({
       'service': ['', Validators.required],
+      'clientId': ['', Validators.required],
       'orderDate': [new Date(), Validators.required],
-      'realizationDate': ['', Validators.required],
+      'orderRealizationDate': ['', Validators.required],
       'price': ['', Validators.required],
-      'isPayed': ['', Validators.required]
+      'isPayed': [false, Validators.required],
+      'isDone': [false, Validators.required]
     });
 
    this.service = this.orderForm.controls['service'];
+   this.clientId = this.orderForm.controls['clientId'];
    this.orderDate = this.orderForm.controls['orderDate'];
-   this.realizationDate = this.orderForm.controls['realizationDate'];
+   this.orderRealizationDate = this.orderForm.controls['orderRealizationDate'];
    this.price = this.orderForm.controls['price'];
    this.isPayed = this.orderForm.controls['isPayed'];
+   this.isDone = this.orderForm.controls['isDone'];
   }
 
-  onSubmit(value: String): void{
-    console.log(value)
+  onSubmit(order: Order) {
+    this.http.post<Order>('/api/orders', order).subscribe(
+      res =>{
+          console.log(res);
+      },
+      err => {
+        console.log(err.message);
+    });
   }
 
   ngOnInit(): void {
-    // this.realizationDate.setDate(this.realizationDate.getDate() + 3);
-    // this.orderDate = new Date(); //.toISOString().substring(0, 10);
-    // this.orderForm.controls['orderForm'].setValue(this.orderDate);
+
   }
 
 }

@@ -11,21 +11,32 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="clientId" class="col-2 col-form-label">Client ID</label>
+                <div class="col-10">
+                    <select class="form-control" id="clientId" [formControl]="orderForm.controls['clientId']">
+                        <option disabled selected value> -- select an option -- </option>
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                    <div *ngIf="!clientId.valid  && clientId.touched" class="error message">Please enter ID</div>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="order-date-input" class="col-2 col-form-label">Order date</label>
                 <div class="col-10">
                     <input class="form-control" type="date" id="order-date-input"
                         [formControl]="orderForm.controls['orderDate']">
-                    <div *ngIf="!orderDate.valid  && orderDate.touched" class="error message">Plese enter order date</div>
-                    <!-- [formControl]="orderForm.controls['orderDate']" -->
-                    <!-- value="{{ orderDate | date:'yyyy-MM-dd' }}" -->
+                    <div *ngIf="!orderDate.valid  && orderDate.touched" class="error message">Plese enter order date
+                    </div>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="realization-date-input" class="col-2 col-form-label">Realization date</label>
                 <div class="col-10">
                     <input class="form-control" type="date" id="realization-date-input"
-                        [formControl]="orderForm.controls['realizationDate']">
-                    <div *ngIf="!realizationDate.valid  && realizationDate.touched" class="error message">Please enter realization date</div>
+                        [formControl]="orderForm.controls['orderRealizationDate']">
+                    <div *ngIf="!orderRealizationDate.valid  && orderRealizationDate.touched" class="error message">Please enter
+                        realization date</div>
                 </div>
             </div>
             <div class="form-group row">
@@ -39,12 +50,27 @@
             <div class="form-group row">
                 <label for="isPayed" class="col-2 col-form-label">Order payed</label>
                 <div class="col-10">
-                    <select class="form-control" id="isPayed" [formControl]="orderForm.controls['isPayed']">
+                    <!-- <select class="form-control" id="isPayed" [formControl]="orderForm.controls['isPayed']">
                         <option disabled selected value> -- select an option -- </option>
                         <option>yes</option>
                         <option>no</option>
-                    </select>
-                    <div *ngIf="!isPayed.valid  && isPayed.touched" class="error message">Please select an option</div>
+                    </select> -->
+                    <label>
+                        <input class="form-control" type="checkbox" id="isPayed" [formControl]="orderForm.controls['isPayed']">Yes
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="isDone" class="col-2 col-form-label">Order done</label>
+                <div class="col-10">
+                    <!-- <select class="form-control" id="isDone" [formControl]="orderForm.controls['isDone']">
+                        <option disabled selected value> -- select an option -- </option>
+                        <option>yes</option>
+                        <option>no</option>
+                    </select> -->
+                    <label>
+                        <input class="form-control" type="checkbox" id="isDone" [formControl]="orderForm.controls['isDone']">Yes
+                    </label>
                 </div>
             </div>
             <ng-template [ngIf]="orderForm.valid" [ngIfElse]="notValid">
