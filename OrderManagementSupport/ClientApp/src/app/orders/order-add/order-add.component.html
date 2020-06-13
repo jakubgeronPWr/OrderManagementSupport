@@ -26,7 +26,7 @@
                 <div class="col-10">
                     <input class="form-control" type="date" id="order-date-input"
                         [formControl]="orderForm.controls['orderDate']">
-                    <div *ngIf="!orderDate.valid" class="error message">Plese enter order date
+                    <div *ngIf="!orderDate.valid" class="error message">Please enter an order date
                     </div>
                 </div>
             </div>
@@ -35,8 +35,7 @@
                 <div class="col-10">
                     <input class="form-control" type="date" id="realization-date-input"
                         [formControl]="orderForm.controls['orderRealizationDate']">
-                    <div *ngIf="!orderRealizationDate.valid  && orderRealizationDate.touched" class="error message">Please enter
-                        realization date</div>
+                    <div *ngIf="!orderRealizationDate.valid" class="error message">Please enter a realization date</div>
                 </div>
             </div>
             <div class="form-group row">
@@ -51,7 +50,8 @@
                 <label for="isPayed" class="col-2 col-form-label">Order payed</label>
                 <div class="col-10">
                     <label>
-                        <input class="form-control" type="checkbox" id="isPayed" [formControl]="orderForm.controls['isPayed']">Yes
+                        <input class="form-control" type="checkbox" id="isPayed"
+                            [formControl]="orderForm.controls['isPayed']">Yes
                     </label>
                 </div>
             </div>
@@ -59,7 +59,8 @@
                 <label for="isDone" class="col-2 col-form-label">Order done</label>
                 <div class="col-10">
                     <label>
-                        <input class="form-control" type="checkbox" id="isDone" [formControl]="orderForm.controls['isDone']">Yes
+                        <input class="form-control" type="checkbox" id="isDone"
+                            [formControl]="orderForm.controls['isDone']">Yes
                     </label>
                 </div>
             </div>
