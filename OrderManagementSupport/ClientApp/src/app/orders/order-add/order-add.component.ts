@@ -23,13 +23,13 @@ export class OrderAddComponent implements OnInit {
 
   constructor(formBuilder: FormBuilder, private readonly http: HttpClient) {
     this.orderForm = formBuilder.group({
-      'service': ['', Validators.required],
+      'service': ['', [Validators.required, Validators.minLength(6)]],
       'clientId': ['', Validators.required],
-      'orderDate': [new Date(), Validators.required],
+      'orderDate': [new Date(), [Validators.required]],
       'orderRealizationDate': ['', Validators.required],
       'price': ['', Validators.required],
-      'isPayed': [false, Validators.required],
-      'isDone': [false, Validators.required]
+      'isPayed': [false],
+      'isDone': [false]
     });
 
    this.service = this.orderForm.controls['service'];

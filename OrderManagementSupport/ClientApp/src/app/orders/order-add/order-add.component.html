@@ -6,8 +6,8 @@
                 <label for="serviceTextarea" class="col-2 col-form-label">Service</label>
                 <div class="col-10">
                     <textarea class="form-control" id="serviceTextarea" rows="3"
-                        [formControl]="orderForm.controls['service']"></textarea>
-                    <div *ngIf="!service.valid  && service.touched" class="error message">Service can not be empty</div>
+                        [formControl]="orderForm.controls['service']" required minlength="6"></textarea>
+                    <div *ngIf="!service.valid && service.touched" class="error message">Service is too short</div>
                 </div>
             </div>
             <div class="form-group row">
@@ -26,7 +26,7 @@
                 <div class="col-10">
                     <input class="form-control" type="date" id="order-date-input"
                         [formControl]="orderForm.controls['orderDate']">
-                    <div *ngIf="!orderDate.valid  && orderDate.touched" class="error message">Plese enter order date
+                    <div *ngIf="!orderDate.valid" class="error message">Plese enter order date
                     </div>
                 </div>
             </div>
@@ -50,11 +50,6 @@
             <div class="form-group row">
                 <label for="isPayed" class="col-2 col-form-label">Order payed</label>
                 <div class="col-10">
-                    <!-- <select class="form-control" id="isPayed" [formControl]="orderForm.controls['isPayed']">
-                        <option disabled selected value> -- select an option -- </option>
-                        <option>yes</option>
-                        <option>no</option>
-                    </select> -->
                     <label>
                         <input class="form-control" type="checkbox" id="isPayed" [formControl]="orderForm.controls['isPayed']">Yes
                     </label>
@@ -63,11 +58,6 @@
             <div class="form-group row">
                 <label for="isDone" class="col-2 col-form-label">Order done</label>
                 <div class="col-10">
-                    <!-- <select class="form-control" id="isDone" [formControl]="orderForm.controls['isDone']">
-                        <option disabled selected value> -- select an option -- </option>
-                        <option>yes</option>
-                        <option>no</option>
-                    </select> -->
                     <label>
                         <input class="form-control" type="checkbox" id="isDone" [formControl]="orderForm.controls['isDone']">Yes
                     </label>
