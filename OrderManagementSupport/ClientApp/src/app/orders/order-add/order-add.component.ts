@@ -49,7 +49,7 @@ export class OrderAddComponent implements OnInit {
       },
       err => {
         console.log(err.message);
-        alert("Order date can not be less than 7 days and more than 7 days from today. Realization date can not be less than order date and more than 90 days after order date");
+        alert("Order date can not be earlier than 7 days and later than 7 days from today. Realization date can not be earlier than order date and later than 90 days after order date");
       });
   }
 
