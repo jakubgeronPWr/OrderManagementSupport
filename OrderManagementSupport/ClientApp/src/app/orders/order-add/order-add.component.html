@@ -1,1 +1,82 @@
-<p>order-add works!</p>
+<form [formGroup]="orderForm" (ngSubmit)="onSubmit(orderForm.value)" class="add-order-form">
+    <div class="card m-3">
+        <h3 class="card-header">Add Order</h3>
+        <div class="form-group">
+            <div class="form-group row">
+                <label for="serviceTextarea" class="col-2 col-form-label">Service</label>
+                <div class="col-10">
+                    <textarea class="form-control" id="serviceTextarea" rows="3"
+                        [formControl]="orderForm.controls['service']" required minlength="6"></textarea>
+                    <div *ngIf="!service.valid && service.touched" class="error message">Service is too short</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="clientId" class="col-2 col-form-label">Client ID</label>
+                <div class="col-10">
+                    <select class="form-control" id="clientId" [formControl]="orderForm.controls['clientId']">
+                        <option disabled selected value> -- select an option -- </option>
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                    <div *ngIf="!clientId.valid  && clientId.touched" class="error message">Please enter ID</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order-date-input" class="col-2 col-form-label">Order date</label>
+                <div class="col-10">
+                    <input class="form-control" type="date" id="order-date-input"
+                        [formControl]="orderForm.controls['orderDate']">
+                    <div *ngIf="!orderDate.valid" class="error message">Please enter an order date
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="realization-date-input" class="col-2 col-form-label">Realization date</label>
+                <div class="col-10">
+                    <input class="form-control" type="date" id="realization-date-input"
+                        [formControl]="orderForm.controls['orderRealizationDate']">
+                    <div *ngIf="!orderRealizationDate.valid" class="error message">Please enter a realization date</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="price-input" class="col-2 col-form-label">Price</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" id="price-input" min="0" step="0.01"
+                        [formControl]="orderForm.controls['price']">
+                    <div *ngIf="!price.valid  && price.touched" class="error message">Price can not be empty</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="isPayed" class="col-2 col-form-label">Order payed</label>
+                <div class="col-10">
+                    <label>
+                        <input class="form-control" type="checkbox" id="isPayed"
+                            [formControl]="orderForm.controls['isPayed']">Yes
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="isDone" class="col-2 col-form-label">Order done</label>
+                <div class="col-10">
+                    <label>
+                        <input class="form-control" type="checkbox" id="isDone"
+                            [formControl]="orderForm.controls['isDone']">Yes
+                    </label>
+                </div>
+            </div>
+            <ng-template [ngIf]="orderForm.valid" [ngIfElse]="notValid">
+                <button class="btn btn-primary" type="submit">Save</button>
+            </ng-template>
+            <ng-template #notValid>
+                <ng-template [ngIf]="orderForm.touched" [ngIfElse]="notTouched">
+                    <div class="error-messege">Invalid form
+                        <button disabled class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                </ng-template>
+                <ng-template #notTouched>
+                    <button disabled class="btn btn-primary" type="submit">Save</button>
+                </ng-template>
+            </ng-template>
+        </div>
+    </div>
+</form>

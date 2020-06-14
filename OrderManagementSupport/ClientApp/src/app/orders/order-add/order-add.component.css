@@ -1,0 +1,23 @@
+.add-order-form{
+    /* margin: 30px 150px 0 150px; */
+    width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.form-group{
+    padding: 5px 40px 5px 40px;
+}
+
+.btn-primary{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.error-messege{
+    text-align: center;
+}
+

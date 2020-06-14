@@ -1,6 +1,13 @@
 <section class="page">
-    <h1>Orders</h1>
-    <app-order-panel *ngFor="let order of orders" [order]="order">
-    </app-order-panel>
-    <p *ngIf="!orders || orders.length === 0">No orders found</p>
-  </section>
+  <div class="card m-3">
+    <h3 class="card-header">Orders</h3>
+    <div class="card-group">
+      <app-order-panel [order]="order" (delete)="deleteOrder($event)" *ngFor="let order of pageOfOrders">
+      </app-order-panel>
+      <p *ngIf="!orders || orders.length === 0">No orders found</p>
+    </div>
+    <div class="card-footer pb-0 pt-3">
+      <jw-pagination [items]="orders" (changePage)="onChangePage($event)"></jw-pagination>
+    </div>
+  </div>
+</section>

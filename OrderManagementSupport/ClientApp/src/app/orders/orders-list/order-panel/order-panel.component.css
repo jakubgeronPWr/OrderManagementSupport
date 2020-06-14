@@ -1,3 +1,14 @@
 .order-panel{
     margin: 15px;
 }
+
+
+/* ********header of order's card ******/
+.payment-status{
+    float: left;
+}
+
+.material-icons{
+    float: right;
+    cursor: pointer;
+}

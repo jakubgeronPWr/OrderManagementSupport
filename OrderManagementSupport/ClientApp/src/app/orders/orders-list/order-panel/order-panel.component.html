@@ -1,15 +1,35 @@
 <div class="order-panel">
-    <div>
-        <div>Order number: {{ order.orderNumber }}</div>
-        <div>Realization date: {{ order.orderRealizationDate }}</div>
-    </div>
-    <div>
-        <span class="material-icons">delete</span>
-    </div>
-    <!-- <div>
-      <a routerLink="/orders/{{order.id}}">Details</a>
-    </div> -->
+    <ng-template [ngIf]="order.isPayed" [ngIfElse]="isNotPayed">
+        <div class="card border-success" style="max-width: 18rem;">
+            <div class="card-header">
+                <div class="payment-status">Payment status: Paid</div>
+                <button class="material-icons" type="button" (click)="deleteOrder()">
+                    <span>delete</span>
+                </button>
+            </div>
+            <div class="card-body text-success">
+                <div class="card-text">{{ order.service }}</div>
+                <div>Price: {{ order.price }}</div>
+                <div>Realization date: {{ order.orderRealizationDate }}</div>
+            </div>
+        </div>
+    </ng-template>
 
-  
-  
+    <ng-template #isNotPayed>
+        <div class="card border-danger" style="max-width: 18rem;">
+            <div class="card-header">
+                <div class="payment-status">Payment status: Unpaid</div>
+                <button class="material-icons" type="button" (click)="deleteOrder()">
+                    <span>delete</span>
+                </button>
+            </div>
+            <div class="card-body text-danger">
+                <div class="card-text">{{ order.service }}</div>
+                <div>Price: {{ order.price }}</div>
+                <div>Realization date: {{ order.orderRealizationDate }}</div>
+            </div>
+        </div>
+    </ng-template>
+
+
 </div>

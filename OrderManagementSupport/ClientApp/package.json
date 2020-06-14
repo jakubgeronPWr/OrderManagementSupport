@@ -21,6 +21,10 @@
     "@angular/platform-browser": "~9.1.4",
     "@angular/platform-browser-dynamic": "~9.1.4",
     "@angular/router": "~9.1.4",
+    "bootstrap": "^4.5.0",
+    "jquery": "^3.5.1",
+    "jw-angular-pagination": "^1.1.0",
+    "jw-paginate": "^1.0.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
