@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <SpaRoot>ClientApp\</SpaRoot>
+    <UserSecretsId>8ccc03bb-c42a-4428-990b-d83068646ab1</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
